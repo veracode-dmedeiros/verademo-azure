@@ -21,9 +21,9 @@ schedules:
   
 resources:
   repositories:
-  - repository: template-scripts
+  - repository: devops-scripts
     type: github
-    name: dmedeiros-veracode/template-scripts
+    name: dmedeiros-veracode/devops-scripts-azure-devops
     endpoint: dmedeiros-veracode
   
 
@@ -59,7 +59,7 @@ stages:
         configuration: '$(buildConfiguration)'
 
     #steps:
-    #- template: steps/abstract-build-steps.yml@template-scripts
+    #- template: steps/abstract-build-steps.yml@devops-scripts
     #  parameters:
     #     buildConfiguration: 'Release'
 
@@ -72,7 +72,7 @@ stages:
     displayName: Debug Build
   
     steps:
-    - template: steps/abstract-build-steps.yml@template-scripts
+    - template: steps/abstract-build-steps.yml@devops-scripts
       parameters:
         buildConfiguration: 'Debug'
 
@@ -102,7 +102,7 @@ stages:
 
 - stage: Security_Testing
   jobs:
-  - template: jobs/veracode-sast-platform-job.yml@template-scripts
+  - template: jobs/veracode-sast-platform-job.yml@devops-scripts
     parameters: 
       downloadArtifact: "WebApp_Debug"
       

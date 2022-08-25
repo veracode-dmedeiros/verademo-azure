@@ -3,32 +3,124 @@
 # Add steps that publish symbols, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
-trigger:
-- main
+repositories:
+ - repository: template-scripts
+   type: github
+   name: dmedeiros-veracode/template-scripts
+   endpoint: dmedeiros-veracode
 
-pool:
-  vmImage: 'windows-latest'
+trigger: none
+
+pr:
+  - main
+
+# Scheduled Daily Builds of master branch
+schedules:
+- cron: 0 15 * * * # cron syntax defining a schedule
+  displayName: Daily Build # friendly name given to a specific schedule
+  branches:
+    include: [ main ] # which branches the schedule applies to
+    #exclude: [ string ] # which branches to exclude from the schedule
+  always: false # whether to always run the pipeline or only if there have been source code changes since the last successful scheduled run. The default is false.schedules:
+
+trigger: none
+pr: none
 
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
-- task: NuGetToolInstaller@1
+pool:
+  vmImage: 'windows-latest'
 
-- task: NuGetCommand@2
+stages: 
+- stage: Build
+        
+  jobs:
+  - job: Build_Release
+    displayName: Release Build
+
+ steps:
+    - task: NuGetToolInstaller@1
+
+  - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: VSBuild@1
+    inputs:
+      solution: '$(solution)'
+      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: VSTest@2
+    inputs:
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
+
+  #steps:
+  #- template: steps/abstract-build-steps.yml@template-scripts
+  #  parameters:
+  #     buildConfiguration: 'Release'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(Build.StagingDirectory)\WebApp.zip
+      artifactName: WebApp_Release
+
+  - job: Build_Debug
+    displayName: Debug Build
+  
+    steps:
+    - template: steps/abstract-build-steps.yml@template-scripts
+      parameters:
+        buildConfiguration: 'Debug'
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(Build.StagingDirectory)\WebApp.zip 
+        artifactName: WebApp_Debug
+
+  #Testing Stage of CI/CD Pipeline
+  - stage: Testing
+
+  jobs: 
+  - job: Unit_Testing
+    displayName: Unit Testing
+      
+    steps: 
+     - task: VSTest@2
+       inputs:
+            platform: '$(buildPlatform)'
+            configuration: '$(buildConfiguration)'
+            
+     - task: DotNetCoreCLI@2
+       inputs:
+            command: 'test'
+            projects: 'verademo-core-test.csproj'
+
+
+  - stage: Security_Testing
+    jobs:
+      - template: jobs/veracode-sast-platform-job.yml@template-scripts
+        parameters: 
+          downloadArtifact: "WebApp_Debug"
+      
+    - job: SCA_Security_Testing
+      displayName: Software Componsition Analysis Testing
+    
+      steps:
+      - bash: echo 'SCA Testing'
+      - bash: echo 'Downloading Project'
+      
+# Deployment Stage of CI/CD Pipeline
+# - stage: Deployment
+
+#  jobs:
+#   - job: Release_Deployment
+#     displayName: Release Deployment
+   
+#     steps:
+#     - bash: echo 'Release Deployed'

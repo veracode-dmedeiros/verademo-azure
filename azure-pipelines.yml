@@ -93,27 +93,27 @@ stages:
     steps: 
      - task: VSTest@2
        inputs:
-            platform: '$(buildPlatform)'
-            configuration: '$(buildConfiguration)'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
             
      - task: DotNetCoreCLI@2
        inputs:
-            command: 'test'
-            projects: 'verademo-core-test.csproj'
+          command: 'test'
+          projects: 'verademo-core-test.csproj'
 
 
-  - stage: Security_Testing
-    jobs:
-      - template: jobs/veracode-sast-platform-job.yml@template-scripts
-        parameters: 
-          downloadArtifact: "WebApp_Debug"
+- stage: Security_Testing
+  jobs:
+  - template: jobs/veracode-sast-platform-job.yml@template-scripts
+    parameters: 
+      downloadArtifact: "WebApp_Debug"
       
-    - job: SCA_Security_Testing
-      displayName: Software Componsition Analysis Testing
+  - job: SCA_Security_Testing
+    displayName: Software Componsition Analysis Testing
     
-      steps:
-      - bash: echo 'SCA Testing'
-      - bash: echo 'Downloading Project'
+    steps:
+    - bash: echo 'SCA Testing'
+    - bash: echo 'Downloading Project'
       
 # Deployment Stage of CI/CD Pipeline
 # - stage: Deployment

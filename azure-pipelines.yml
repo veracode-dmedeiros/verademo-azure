@@ -18,12 +18,14 @@ schedules:
     include: [ main ] # which branches the schedule applies to
     #exclude: [ string ] # which branches to exclude from the schedule
   always: false # whether to always run the pipeline or only if there have been source code changes since the last successful scheduled run. The default is false.schedules:
-
+  
 resources:
- - repository: template-scripts
-   type: github
-   name: dmedeiros-veracode/template-scripts
-   endpoint: dmedeiros-veracode
+  repositories:
+  - repository: template-scripts
+    type: github
+    name: dmedeiros-veracode/template-scripts
+    endpoint: dmedeiros-veracode
+  
 
 variables:
   solution: '**/*.sln'

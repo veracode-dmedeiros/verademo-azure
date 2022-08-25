@@ -4,11 +4,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 name: Daily Build
 
-repositories:
- - repository: template-scripts
-   type: github
-   name: dmedeiros-veracode/template-scripts
-   endpoint: dmedeiros-veracode
+pool:
+  vmImage: 'windows-latest'
+
+trigger: none
+pr: none
 
 # Scheduled Daily Builds of master branch
 schedules:
@@ -19,16 +19,16 @@ schedules:
     #exclude: [ string ] # which branches to exclude from the schedule
   always: false # whether to always run the pipeline or only if there have been source code changes since the last successful scheduled run. The default is false.schedules:
 
-trigger: none
-pr: none
+resources::
+ - repository: template-scripts
+   type: github
+   name: dmedeiros-veracode/template-scripts
+   endpoint: dmedeiros-veracode
 
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-
-pool:
-  vmImage: 'windows-latest'
 
 stages: 
 - stage: Build

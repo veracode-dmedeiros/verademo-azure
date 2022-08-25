@@ -10,11 +10,6 @@ repositories:
    name: dmedeiros-veracode/template-scripts
    endpoint: dmedeiros-veracode
 
-trigger: none
-
-pr:
-  - main
-
 # Scheduled Daily Builds of master branch
 schedules:
 - cron: 0 15 * * * # cron syntax defining a schedule

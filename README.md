@@ -1,1 +1,1 @@
-# azure-verademo
+# verademo-azure

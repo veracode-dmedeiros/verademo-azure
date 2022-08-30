@@ -2,7 +2,7 @@
 # Build and test ASP.NET projects.
 # Add steps that publish symbols, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-name: Daily Build
+name:  $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
 pool:
   vmImage: 'windows-latest'
@@ -40,6 +40,7 @@ stages:
     displayName: Release Build
 
     steps:
+    - script: echo '$(Build.BuildNumber)'
     - task: NuGetToolInstaller@1
 
     - task: NuGetCommand@2
@@ -72,6 +73,8 @@ stages:
     displayName: Debug Build
   
     steps:
+    - script: echo '$(Build.BuildNumber)'
+    
     - template: steps/abstract-build-steps.yml@devops-scripts
       parameters:
         buildConfiguration: 'Debug'

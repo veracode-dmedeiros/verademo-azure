@@ -24,7 +24,7 @@ resources:
   - repository: devops-scripts
     type: github
     name: dmedeiros-veracode/devops-scripts-azure-devops
-    endpoint: dmedeiros-veracode
+    endpoint: 'GitHub Connection'
   
 
 variables:
@@ -65,7 +65,7 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: $(Build.StagingDirectory)\WebApp.zip
+        targetPath: $(Build.StagingDirectory)\$(system.teamProject).zip
         artifactName: WebApp_Release
 
   - job: Build_Debug
@@ -78,7 +78,7 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: $(Build.StagingDirectory)\WebApp.zip 
+        targetPath: $(Build.StagingDirectory)\$(system.teamProject).zip 
         artifactName: WebApp_Debug
 
 #Testing Stage of CI/CD Pipeline

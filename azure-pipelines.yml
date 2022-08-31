@@ -24,7 +24,7 @@ resources:
   - repository: devops-scripts
     type: github
     name: dmedeiros-veracode/devops-scripts-azure-devops
-    endpoint: 'GitHub Connection'
+    endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
   
 
 variables:

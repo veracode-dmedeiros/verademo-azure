@@ -5,16 +5,62 @@
 name: $(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
 
 trigger: none
-# - main
+   # - main
+pr: none
+
+resources:
+  repositories:
+    - repository: devops-scripts
+      type: github
+      name: dmedeiros-veracode/devops-scripts-azure-devops
+      endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages: 
+- stage: Build
+        
+  jobs:
+  - job: Build_Debug
+    displayName: Debug Build
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    steps:
+    - template: steps/abstract-build-steps.yml@devops-scripts
+      parameters:
+        buildConfiguration: 'Debug'
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(Build.StagingDirectory)\$(system.teamProject).zip 
+        artifactName: WebApp_Debug
+
+- stage: Security_Testing
+  jobs:       
+  - job: SAST_Security_Testing
+    displayName: Static Analysis Security Testing
+
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: ${{ parameters.downloadArtifact }}
+
+    - bash: echo 'Veracode Pipeline SAST'
+    - bash: ls -la
+   
+    - script: curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      displayName: "Download Pipeline Scan"
+
+    - script: unzip -o pipeline-scan-LATEST.zip
+      displayName: Download Pipeline Scan
+
+    - script: java -jar pipeline-scan.jar --version
+      displayName: "Run Pipeline Scan" 
+      
+    - script: echo Hello, world!
+      displayName: 'Run a one-line script'
+
+    - script: |
+      echo Add other tasks to build, test, and deploy your project.
+      echo See https://aka.ms/yaml
+      displayName: 'Run a multi-line script'

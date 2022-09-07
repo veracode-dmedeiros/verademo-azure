@@ -16,7 +16,8 @@ resources:
       endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
 
 pool:
-  vmImage: ubuntu-latest
+  #vmImage: ubuntu-latest
+  vmImage: 'windows-latest'
 
 stages: 
 - stage: Build

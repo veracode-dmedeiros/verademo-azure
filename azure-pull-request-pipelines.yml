@@ -33,7 +33,7 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: $(Build.StagingDirectory)\$(system.teamProject).zip 
+        targetPath: $(Build.StagingDirectory)
         artifactName: WebApp_Debug
 
 - stage: Security_Testing
@@ -46,8 +46,9 @@ stages:
     - task: DownloadPipelineArtifact@2
       displayName: "Download Artifact"
       inputs:
+        targetPath: $(Build.StagingDirectory)
         artifact: WebApp_Debug 
-
+        
     - script: ls -la $(Build.StagingDirectory)
       displayName: "Show Workspace Contents"
    

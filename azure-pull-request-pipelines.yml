@@ -42,21 +42,25 @@ stages:
     displayName: Static Analysis Security Testing
 
     steps:
+    - checkout: none
     - task: DownloadPipelineArtifact@2
       inputs:
         artifact: WebApp_Debug
 
-    - bash: echo 'Veracode Pipeline SAST'
-    - bash: ls -la
+    - script: echo 'Veracode Pipeline SAST'
+    - script: |
+         pwd
+         ls -la
+      displayName: "Show Contents"
    
     - script: curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
       displayName: "Download Pipeline Scan"
 
     - script: unzip -o pipeline-scan-LATEST.zip
-      displayName: Download Pipeline Scan
+      displayName: "Unzip Pipeline Scan"
 
     - script: java -jar pipeline-scan.jar --version
-      displayName: "Run Pipeline Scan" 
+      displayName: "Pipeline Scan Version" 
       
     - script: echo Hello, world!
       displayName: 'Run a one-line script'

@@ -48,7 +48,7 @@ stages:
       inputs:
         artifact: WebApp_Debug 
 
-    - script: ls -la '$(Pipeline.Workspace)' 
+    - script: ls -la $(Build.StagingDirectory)
       displayName: "Show Workspace Contents"
    
     - script: echo 'Prepare Veracode Pipeline SAST'
@@ -61,7 +61,7 @@ stages:
     - script: java -jar pipeline-scan.jar --version
       displayName: "Pipeline Scan Version" 
       
-    - script: java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f $(Pipeline.Workspace) # || true
+    - script: java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f $(Build.StagingDirectory)\$(system.teamProject).zip  # || true
       displayName: "Running Analysis"
       
     - script: echo Hello, world!

@@ -44,15 +44,14 @@ stages:
     steps:
     - checkout: none
     - task: DownloadPipelineArtifact@2
+      displayName: "Download Artifact"
       inputs:
-        artifact: WebApp_Debug
+        artifact: WebApp_Debug 
 
-    - script: echo 'Veracode Pipeline SAST'
-    - script: |
-         pwd
-         ls -la
-      displayName: "Show Contents"
+    - script: ls -la '$(Pipeline.Workspace)' 
+      displayName: "Show Workspace Contents"
    
+    - script: echo 'Prepare Veracode Pipeline SAST'
     - script: curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
       displayName: "Download Pipeline Scan"
 
@@ -61,6 +60,9 @@ stages:
 
     - script: java -jar pipeline-scan.jar --version
       displayName: "Pipeline Scan Version" 
+      
+    - script: java -jar pipeline-scan.jar -vid $(VERACODE_API_ID) -vkey $(VERACODE_API_KEY) -f $(Pipeline.Workspace) # || true
+      displayName: "Running Analysis"
       
     - script: echo Hello, world!
       displayName: 'Run a one-line script'

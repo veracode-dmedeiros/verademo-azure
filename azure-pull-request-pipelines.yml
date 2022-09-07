@@ -43,7 +43,7 @@ stages:
     steps:
     - task: DownloadPipelineArtifact@2
       inputs:
-        artifact: ${{ parameters.downloadArtifact }}
+        artifact: WebApp_Debug
 
     - bash: echo 'Veracode Pipeline SAST'
     - bash: ls -la

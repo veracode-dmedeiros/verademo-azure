@@ -20,7 +20,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-- group: 'Veracode Credentials'
+- group: 'Veracode Credentials' # Reference the library containing Veracode Credentials
 
 stages: 
 - stage: Build

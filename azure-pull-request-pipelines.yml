@@ -49,6 +49,7 @@ stages:
         targetPath: $(Build.StagingDirectory)
         artifact: WebApp_Debug 
         
+    - script: ls -la $(Agent.BuildDirectory)
     - script: ls -la $(Build.StagingDirectory)
       displayName: "Show Workspace Contents"
    

@@ -19,6 +19,9 @@ pool:
   #vmImage: ubuntu-latest
   vmImage: 'windows-latest'
 
+variables:
+- group: 'Veracode Credentials'
+
 stages: 
 - stage: Build
         
@@ -63,7 +66,7 @@ stages:
     - script: java -jar pipeline-scan.jar --version
       displayName: "Pipeline Scan Version" 
       
-    - script: java -jar pipeline-scan.jar -vid '$(VERACODE_API_ID)' -vkey '$(VERACODE_API_KEY)' -f $(Build.StagingDirectory)\$(system.teamProject).zip  # || true
+    - script: java -jar pipeline-scan.jar -vid $(Secret.VERACODE_API_ID) -vkey $(Secret.VERACODE_API_KEY) -f $(Build.StagingDirectory)\$(system.teamProject).zip  # || true
       displayName: "Running Analysis"
       
     - script: echo Hello, world!

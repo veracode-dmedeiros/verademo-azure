@@ -2,7 +2,15 @@ parameters:
   - name: method
     default: ""
     type: string
-
+  - name: quickScan
+    displayName: Quick Scan
+    type: boolean
+    default: false
+  - name: uploadResults
+    displayName: Upload Results
+    type: boolean
+    default: true
+    
 pool:
   vmImage: ubuntu-latest
   #vmImage: 'windows-latest'
@@ -16,5 +24,9 @@ jobs:
 
     steps:
     - script: ls -la
-    - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan --url https://github.com/srcclr/example-ruby --no-upload
-      displayName: Performing SCA Analysis
+    - ${{ if eq(parameters.quickScan, true) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan --url https://github.com/srcclr/example-ruby --no-upload
+        displayName: Performing SCA Analysis
+    - ${{ if eq(parameters.quickScan, false) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan --url https://github.com/srcclr/example-ruby --no-upload --quick
+        displayName: Performing SCA Analysis

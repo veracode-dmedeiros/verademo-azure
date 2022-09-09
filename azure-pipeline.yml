@@ -6,6 +6,9 @@ parameters:
 pool:
   vmImage: ubuntu-latest
   #vmImage: 'windows-latest'
+  
+variables:
+- group: 'SCA Agent Configuration' # Reference the library containing Veracode Credentials
 
 jobs:
   - job: SCA_Agent_Security_Testing

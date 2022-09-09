@@ -1,0 +1,17 @@
+parameters:
+  - name: method
+    default: ""
+    type: string
+
+pool:
+  vmImage: ubuntu-latest
+  #vmImage: 'windows-latest'
+
+jobs:
+  - job: SCA_Agent_Security_Testing
+    displayName: Software Componsition Analysis Testing
+
+    steps:
+    - script: ls -la
+    - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan --url https://github.com/srcclr/example-ruby --no-upload
+      displayName: Performing SCA Analysis

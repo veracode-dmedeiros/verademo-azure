@@ -23,10 +23,10 @@ jobs:
     displayName: Software Componsition Analysis Testing
 
     steps:
-    - script: ls -la
+    - script: ls -la $(Build.SourcesDirectory)
     - ${{ if eq(parameters.quickScan, true) }}:
-      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan --url https://github.com/srcclr/example-ruby --no-upload --quick
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
         displayName: Performing SCA Analysis
     - ${{ if eq(parameters.quickScan, false) }}:
-      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan --url https://github.com/srcclr/example-ruby --no-upload
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload
         displayName: Performing SCA Analysis

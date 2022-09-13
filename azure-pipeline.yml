@@ -1,16 +1,16 @@
-parameters:
-  - name: method
-    default: ""
-    type: string
-  - name: quickScan
-    displayName: Quick Scan
-    type: boolean
-    default: false
-  - name: uploadResults
-    displayName: Upload Results
-    type: boolean
-    default: false
-    
+name: $(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
+
+trigger: none
+   # - main
+pr: none
+
+resources:
+  repositories:
+    - repository: devops-scripts
+      type: github
+      name: dmedeiros-veracode/devops-scripts-azure-devops
+      endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
+
 pool:
   vmImage: ubuntu-latest
   #vmImage: 'windows-latest'
@@ -19,14 +19,7 @@ variables:
 - group: 'SCA Agent Configuration' # Reference the library containing Veracode Credentials
 
 jobs:
-  - job: SCA_Agent_Security_Testing
-    displayName: Software Componsition Analysis Testing
-
-    steps:
-    - script: ls -la $(Build.SourcesDirectory)
-    - ${{ if eq(parameters.quickScan, true) }}:
-      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
-        displayName: Performing SCA Analysis
-    - ${{ if eq(parameters.quickScan, false) }}:
-      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload
-        displayName: Performing SCA Analysis
+  - template: jobs/veracode-sca-agent-job.yml@devops-scripts
+    #parameters:
+    #    quickScan: false
+        

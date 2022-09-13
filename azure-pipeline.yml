@@ -9,7 +9,7 @@ resources:
     - repository: devops-scripts
       type: github
       name: dmedeiros-veracode/devops-scripts-azure-devops
-      branch: development
+      ref: development
       endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
     
 pool:

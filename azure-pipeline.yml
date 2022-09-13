@@ -4,6 +4,15 @@ trigger: none
    # - main
 pr: none
 
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    mac:
+      imageName: 'macOS-latest'
+    windows:
+      imageName: 'windows-latest'
+
 resources:
   repositories:
     - repository: devops-scripts
@@ -11,10 +20,9 @@ resources:
       name: dmedeiros-veracode/devops-scripts-azure-devops
       ref: development
       endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
-    
+
 pool:
-  vmImage: ubuntu-latest
-  #vmImage: 'windows-latest'
+  vmImage: $(imageName)
   
 variables:
 - group: 'SCA Agent Configuration' # Reference the library containing Veracode Credentials

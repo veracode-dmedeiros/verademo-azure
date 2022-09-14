@@ -12,23 +12,3 @@ strategy:
       imageName: 'macOS-latest'
     windows:
       imageName: 'windows-latest'
-
-resources:
-  repositories:
-    - repository: devops-scripts
-      type: github
-      name: dmedeiros-veracode/devops-scripts-azure-devops
-      ref: development
-      endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
-
-pool:
-  vmImage: $(imageName)
-  
-variables:
-- group: 'SCA Agent Configuration' # Reference the library containing Veracode Credentials
-
-jobs:
-  - template: jobs/veracode-sca-agent-job.yml@devops-scripts
-    #parameters:
-    #    quickScan: false
-        

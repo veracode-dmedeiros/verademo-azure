@@ -1,0 +1,23 @@
+# File: azure-sca-agent-pipeline.yml
+
+name: $(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
+
+trigger: none
+pr: none
+
+resources:
+  repositories:
+    - repository: devops-scripts # Name given to reference this repository link
+      type: github # Type of Repository
+      name: dmedeiros-veracode/devops-scripts-azure-devops # Repository Reference
+      ref: $(Build.SourceBranchName) # Repository Branch to Reference
+      endpoint: dmedeiros-veracode # Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
+
+pool:
+  vmImage: 'ubuntu-latest'
+  
+variables:
+- group:  'SCA Agent Configuration' # Reference the library containing 
+
+jobs:
+  - template: jobs/veracode-sca-agent-job.yml@devops-scripts

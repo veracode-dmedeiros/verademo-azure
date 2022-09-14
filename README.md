@@ -9,8 +9,8 @@ The Verademo application example is a simple .NET Core web application with a An
 Pipeline | Script | Status
 ------ | ------   |----
 Scheduled Daily Release Candidate Build from Main| azure-scheduled.yml | [![Build Status](https://dev.azure.com/veracode-demonstration/verademo-azure/_apis/build/status/Scheduled%20Daily%20Release%20Candidate%20Build%20from%20Main?repoName=dmedeiros-veracode%2Fverademo-azure&branchName=main)](https://dev.azure.com/veracode-demonstration/verademo-azure/_build/latest?definitionId=16&repoName=dmedeiros-veracode%2Fverademo-azure&branchName=main)
-Pull Request    | azure-pull-request.yml|   
-Release Cadidate     |       
+Pull Request    | azure-pull-request.yml|   [![Build Status](https://dev.azure.com/veracode-demonstration/verademo-azure/_apis/build/status/Pull%20Request%20Pipeline?repoName=dmedeiros-veracode%2Fverademo-azure&branchName=main)](https://dev.azure.com/veracode-demonstration/verademo-azure/_build/latest?definitionId=18&repoName=dmedeiros-veracode%2Fverademo-azure&branchName=main)
+Pull Request (Dynamic)    |  Experiment |   [![Build Status](https://dev.azure.com/veracode-demonstration/verademo-azure/_apis/build/status/Pull%20Request%20Pipeline?repoName=dmedeiros-veracode%2Fverademo-azure&branchName=development)](https://dev.azure.com/veracode-demonstration/verademo-azure/_build/latest?definitionId=18&repoName=dmedeiros-veracode%2Fverademo-azure&branchName=$(Build.SourceBranchName))
 
 # Pipeline Examples
 The examples for the pipelines within the main line branch are only a demonstration of a successful path throught the SDLC in each case. The Verademo application within this branch does not container any weaknesses or vulnerablities to demonstrate any strategy.

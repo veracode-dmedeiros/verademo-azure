@@ -16,6 +16,11 @@ resources:
 pool:
   vmImage: 'ubuntu-latest'
   
+parameters:
+  - name: quickScan
+    trype: boolean
+    default: true
+  
 variables:
 - group:  'SCA Agent Configuration' # Reference the library containing 
 

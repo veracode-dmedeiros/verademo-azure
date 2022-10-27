@@ -1,0 +1,36 @@
+# File: azure-sca-agent-pipeline.yml
+
+name: $(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
+
+trigger: none
+pr: none
+
+resources:
+  repositories:
+    - repository: devops-scripts # Name given to reference this repository link
+      type: github # Type of Repository
+      name: dmedeiros-veracode/devops-scripts-azure-devops # Repository Reference
+      ref: $(Build.SourceBranchName) # Repository Branch to Reference
+      endpoint: dmedeiros-veracode # Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
+
+pool:
+  vmImage: 'ubuntu-latest'
+  
+variables:
+- group:  'SCA Agent Configuration' # Reference the library containing 
+
+#jobs:
+# - template: jobs/veracode-sca-agent-job.yml@devops-scripts
+
+jobs:
+  - job: SCA_Agent_Security_Testing
+    displayName: Software Composition Analysis Testing
+
+    steps:
+    - script: ls -la $(Build.SourcesDirectory)
+    - ${{ if eq(parameters.quickScan, true) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
+        displayName: Performing SCA Analysis
+    - ${{ if eq(parameters.quickScan, false) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload
+        displayName: Performing SCA Analysis

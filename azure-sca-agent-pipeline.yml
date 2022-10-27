@@ -19,5 +19,18 @@ pool:
 variables:
 - group:  'SCA Agent Configuration' # Reference the library containing 
 
+#jobs:
+# - template: jobs/veracode-sca-agent-job.yml@devops-scripts
+
 jobs:
-  - template: jobs/veracode-sca-agent-job.yml@devops-scripts
+  - job: SCA_Agent_Security_Testing
+    displayName: Software Composition Analysis Testing
+
+    steps:
+    - script: ls -la $(Build.SourcesDirectory)
+    - ${{ if eq(parameters.quickScan, true) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
+        displayName: Performing SCA Analysis
+    - ${{ if eq(parameters.quickScan, false) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload
+        displayName: Performing SCA Analysis

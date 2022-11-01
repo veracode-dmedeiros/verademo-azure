@@ -56,3 +56,5 @@ The sample scripts ei
 
 [Azure DevOps Script Repository](https://github.com/dmedeiros-veracode/devops-scripts-azure-devops.git)
 
+
+https://dev.azure.com/veracode-demonstration/verademo-azure
